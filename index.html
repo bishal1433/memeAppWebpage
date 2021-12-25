@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <!-- font awesome icon cdn -->
+
+    <!-- html2canvas libraries -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+     <!-- jquery cdn -->
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+
+     <!-- html2canvas libraries -->
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.js"></script>
+    <style>
+        *{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+.colr {
+    color: #8d4801;
+    font-family: 'san-serif';
+}
+#main{
+    width: 65vw;
+    margin: 10px auto;
+    text-align: center;
+}
+#downloads{
+    display:none;
+}
+#memes{
+    width: 65vw;
+    height: 70vh;
+    position: relative;
+}
+img{
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+textarea{
+    width: 65vw;
+    resize: vertical;
+    height: 40px;
+    font-size: 25px;
+    overflow: hidden;
+    height: 60px;
+    text-align: center;
+    outline: none;
+    margin-bottom: -10px;
+    font-weight: 600;
+    font-family: sans-serif;
+    border: none;
+    padding: 5px;
+}
+.upper{
+    background: #e5ff00;
+    color: black;
+}
+.lower{
+    background: black;
+    color: white;
+}
+#input{
+    display: none;
+    margin-top: 50px;
+}
+label{
+    margin-bottom: 0rem;
+}
+/* .btn{
+    background: rgb(149, 43, 43);
+    text-transform: capitalize;
+    padding: 5px 10px;
+    font-family: sans-serif;
+    border: none;
+    outline: none;
+    font-size: 15px;
+    display: inline-block;
+    color: white;
+    text-decoration: none;
+} */
+    /* display:; */
+i{
+    padding: 0 5px;
+}
+.access{
+    margin-top: 20px;
+    text-align: center;
+}
+#memes{
+    background: rgb(187, 186, 186);
+}
+
+@media screen and (max-width:800px){
+    #main,img,textarea,#memes{
+        width: 90vw;
+    }
+}
+@media screen and (max-width:579px){
+    #memes,img{
+        height: 50vh;
+    }
+    .access a{
+        display: block;
+        width: 170px;
+        margin: 5px auto;
+    }
+}
+
+    </style>
+
+</head>
+<body>
+    <h1 class="card-header text-center colr">MEME GENERATOR</h1>
+
+    <div id="main">
+        <textarea name="" class="upper"       placeholder="Type Something"></textarea>
+        <br>
+        <div id="memes">
+            <img src="" alt="img" id="img">
+        </div>
+        <textarea name="" class="lower" placeholder="Type Something"></textarea>
+        <br>
+    </div>
+
+
+    <div class="access">
+        <input type="file" id="input" accept="image/*" name="meme">
+        <label for="input" class="btn btn-success" ><i class="fa fa-upload"></i>upload your image</label>
+        <a href="" id="refresh" class="btn btn-success"><i class="fa fa-refresh"></i>Refresh</a>
+        <a href="#" id="btn-preview" class="btn btn-success"><i class="fa fa-cog"></i>Generate</a>
+        <button id="downloads" class="btn btn-success"><i class="fa fa-download "></i>Download</button>
+    </div>
+
+      <!-- jquery cdn -->
+      <!-- <script src="html2Canvas.js"></script> -->
+      <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script> -->
+
+      <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+      <script>
+//uploading image on webpage...
+const image_input=document.querySelector("#input");
+var upload_image;
+
+image_input.addEventListener("change",function(){
+    // console.log(image_input.value);
+    const reader=new FileReader();
+    reader.addEventListener("load",function(){
+        upload_image=reader.result;
+        document.querySelector("#img").setAttribute("src",`${upload_image}`);
+
+    });
+    reader.readAsDataURL(this.files[0]);
+});
+
+//when click on generate button
+
+var getCanvas;
+var element = document.querySelector("#main");
+const generate_btn=document.querySelector("#btn-preview");
+
+generate_btn.addEventListener("click",function(){
+    html2canvas(element, {
+        onrendered: function (canvas) {
+            //taking the value of canvas on get canvas....
+                getCanvas = canvas;
+            //make invisible of generate button
+            var x=document.querySelector("#btn-preview").style;
+            x.display="none";
+            x=document.querySelector("#downloads").style;
+            x.display="inline-block";
+            }
+        });
+
+});
+
+
+//downloading the screenshots using html2canvas library..
+
+const download_btn=document.querySelector("#downloads");
+
+download_btn.addEventListener("click",function(){
+    var image= getCanvas.toDataURL("image/png");
+    const a=document.createElement("a");
+    document.body.appendChild(a);
+    a.href=image;
+    a.download="my-meme.png";
+    a.click();
+    document.body.removeChild(a);
+});
+
+//refreshing the site again...
+document.querySelector("#refresh").on('click',function (){
+    location.reload();
+  })
+      </script>
+</body>
+</html>
